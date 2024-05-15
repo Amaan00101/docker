@@ -1,0 +1,64 @@
+
+1. Build a docker image using the Dockerfile and name it webapp-color. No tag to be specified.
+
+$ docker build -t webapp-color .
+Sending build context to Docker daemon  125.4kB
+Step 1/6 : FROM python:3.6
+3.6: Pulling from library/python
+0e29546d541c: Pull complete 
+9b829c73b52b: Pull complete 
+cb5b7ae36172: Pull complete 
+6494e4811622: Extracting  49.02MB/54.57MB
+6f9f74896dfa: Download complete 
+5e3b1213efc5: Download complete 
+9fddfdc56334: Download complete 
+404f02044bac: Download complete 
+c4f42be2be53: Download complete 
+
+
+2. Run an instance of the image webapp-color and publish port 8080 on the container to 8282 on the host.
+
+$ docker run -d -p 8282:8080 webapp-color
+1af33f1a5f132032db0bb33f08613660cc2bb45b3714e2fabe37bdb389e3adf5
+
+
+3. Build a new smaller docker image by modifying the same Dockerfile and name it webapp-color and tag it lite.
+   Hint: Find a smaller base image for python:3.6. Make sure the final image is less than 150MB.
+
+$ docker build -t webapp-color:lite .
+Sending build context to Docker daemon  125.4kB
+Step 1/6 : FROM python:3.6-alpine
+3.6-alpine: Pulling from library/python
+59bf1c3509f3: Pull complete 
+8786870f2876: Pull complete 
+acb0e804800e: Pull complete 
+52bedcb3e853: Pull complete 
+b064415ed3d7: Pull complete 
+Digest: sha256:579978dec4602646fe1262f02b96371779bfb0294e92c91392707fa999c0c989
+Status: Downloaded newer image for python:3.6-alpine
+Removing intermediate container dd34a7d7f089
+ ---> fa11555561c5
+Step 3/6 : COPY . /opt/
+ ---> 1e9b4a23c9e9
+Step 4/6 : EXPOSE 8080
+ ---> Running in e5d0a8e6a259
+Removing intermediate container e5d0a8e6a259
+ ---> 78e92a621297
+Step 5/6 : WORKDIR /opt
+ ---> Running in f5a542548511
+Removing intermediate container f5a542548511
+ ---> 9ab1793bc01f
+Step 6/6 : ENTRYPOINT ["python", "app.py"]
+ ---> Running in e2eca28be777
+Removing intermediate container e2eca28be777
+ ---> c74232e3e756
+Successfully built c74232e3e756
+Successfully tagged webapp-color:lite
+
+
+
+4. Run an instance of the new image webapp-color:lite and publish port 8080 on the container to 8383 on the host.
+
+$ docker run -d -p 8383:8080 webapp-color:lite
+ecee556ac180b35ce457658ee2adca51dbb7acb3bf50630dcf3f7e9ab04ed748
+$
